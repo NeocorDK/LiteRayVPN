@@ -2,6 +2,12 @@
 
 Tauri 2 (Rust backend + Svelte 5 UI). Клиент — тонкая оболочка над `xray.exe`: генерирует JSON-конфиг, запускает ядро дочерним процессом и опрашивает его метрики. Всё сетевое (TUN через wintun, маршрутизация по процессам, DNS) делает сам Xray.
 
+## Ветки
+
+- Разработка идёт в `dev`, пушить туда.
+- В `main` попадают только релизные версии (слияние из `dev` при выпуске, тег `vX.Y.Z`, запись в CHANGELOG).
+- Remote: `git@github.com:NeocorDK/LiteRayVPN.git` (SSH-ключ `~/.ssh/github_ed25519`).
+
 ## Команды
 
 - `npm run fetch-core` — скачать xray.exe, wintun.dll, geoip/geosite в `src-tauri/resources/xray` (с проверкой SHA-256). Нужно один раз после клонирования.
