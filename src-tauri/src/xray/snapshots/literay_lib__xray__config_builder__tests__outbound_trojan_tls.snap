@@ -1,0 +1,30 @@
+---
+source: src/xray/config_builder.rs
+expression: "config[\"outbounds\"][0]"
+---
+{
+  "protocol": "trojan",
+  "settings": {
+    "servers": [
+      {
+        "address": "tr.example.com",
+        "password": "secret",
+        "port": 443
+      }
+    ]
+  },
+  "streamSettings": {
+    "network": "raw",
+    "security": "tls",
+    "tlsSettings": {
+      "alpn": [
+        "h2",
+        "http/1.1"
+      ],
+      "fingerprint": "chrome",
+      "serverName": "tr.example.com"
+    }
+  },
+  "tag": "proxy",
+  "targetStrategy": "UseIPv4"
+}

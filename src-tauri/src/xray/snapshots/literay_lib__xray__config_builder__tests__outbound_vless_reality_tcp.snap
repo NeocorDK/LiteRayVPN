@@ -1,0 +1,35 @@
+---
+source: src/xray/config_builder.rs
+expression: "config[\"outbounds\"][0]"
+---
+{
+  "protocol": "vless",
+  "settings": {
+    "vnext": [
+      {
+        "address": "85.137.172.26",
+        "port": 443,
+        "users": [
+          {
+            "encryption": "none",
+            "flow": "xtls-rprx-vision",
+            "id": "11111111-2222-3333-4444-555555555555"
+          }
+        ]
+      }
+    ]
+  },
+  "streamSettings": {
+    "network": "raw",
+    "realitySettings": {
+      "fingerprint": "chrome",
+      "publicKey": "Z84J2IelR9ch3k8VtlVhhs5ycBUlXA7wHBWcBrjqnAw",
+      "serverName": "intel.com",
+      "shortId": "6ba85179e30d4fc2",
+      "spiderX": "/"
+    },
+    "security": "reality"
+  },
+  "tag": "proxy",
+  "targetStrategy": "UseIPv4"
+}

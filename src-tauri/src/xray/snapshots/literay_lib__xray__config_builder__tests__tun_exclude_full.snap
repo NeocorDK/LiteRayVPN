@@ -1,0 +1,262 @@
+---
+source: src/xray/config_builder.rs
+expression: config
+---
+{
+  "burstObservatory": {
+    "pingConfig": {
+      "destination": "https://www.gstatic.com/generate_204",
+      "interval": "10s",
+      "sampling": 2,
+      "timeout": "5s"
+    },
+    "subjectSelector": [
+      "proxy"
+    ]
+  },
+  "dns": {
+    "queryStrategy": "UseIPv4",
+    "servers": [
+      {
+        "address": "77.88.8.8",
+        "domains": [
+          "geosite:category-ru",
+          "domain:ru",
+          "domain:su",
+          "domain:xn--p1ai",
+          "domain:example.org",
+          "geosite:youtube"
+        ],
+        "skipFallback": true
+      },
+      "https://1.1.1.1/dns-query"
+    ],
+    "tag": "dns-internal"
+  },
+  "inbounds": [
+    {
+      "protocol": "tun",
+      "settings": {
+        "autoOutboundsInterface": "auto",
+        "autoSystemRoutingTable": [
+          "0.0.0.0/0",
+          "::/0"
+        ],
+        "dns": [
+          "172.19.0.2"
+        ],
+        "gateway": [
+          "172.19.0.1/30",
+          "fdfe:dcba:9876::1/126"
+        ],
+        "mtu": 1500,
+        "name": "LiteRay"
+      },
+      "sniffing": {
+        "destOverride": [
+          "http",
+          "tls",
+          "quic"
+        ],
+        "enabled": true,
+        "routeOnly": true
+      },
+      "tag": "tun-in"
+    },
+    {
+      "listen": "127.0.0.1",
+      "port": 10808,
+      "protocol": "mixed",
+      "settings": {
+        "udp": true
+      },
+      "sniffing": {
+        "destOverride": [
+          "http",
+          "tls",
+          "quic"
+        ],
+        "enabled": true,
+        "routeOnly": true
+      },
+      "tag": "mixed-in"
+    }
+  ],
+  "log": {
+    "access": "none",
+    "loglevel": "warning"
+  },
+  "metrics": {
+    "listen": "127.0.0.1:19090",
+    "tag": "metrics"
+  },
+  "outbounds": [
+    {
+      "protocol": "vless",
+      "settings": {
+        "vnext": [
+          {
+            "address": "77.73.66.190",
+            "port": 443,
+            "users": [
+              {
+                "encryption": "none",
+                "id": "11111111-2222-3333-4444-555555555555"
+              }
+            ]
+          }
+        ]
+      },
+      "streamSettings": {
+        "network": "xhttp",
+        "realitySettings": {
+          "fingerprint": "firefox",
+          "publicKey": "Z84J2IelR9ch3k8VtlVhhs5ycBUlXA7wHBWcBrjqnAw",
+          "serverName": "reddit.com",
+          "shortId": "ab"
+        },
+        "security": "reality",
+        "xhttpSettings": {
+          "extra": {
+            "xPaddingBytes": "100-1000"
+          },
+          "mode": "auto",
+          "path": "/api"
+        }
+      },
+      "tag": "proxy",
+      "targetStrategy": "UseIPv4"
+    },
+    {
+      "protocol": "freedom",
+      "streamSettings": {
+        "sockopt": {
+          "domainStrategy": "UseIPv4"
+        }
+      },
+      "tag": "direct"
+    },
+    {
+      "protocol": "blackhole",
+      "tag": "block"
+    },
+    {
+      "protocol": "dns",
+      "tag": "dns-out"
+    }
+  ],
+  "policy": {
+    "system": {
+      "statsOutboundDownlink": true,
+      "statsOutboundUplink": true
+    }
+  },
+  "routing": {
+    "domainStrategy": "IPIfNonMatch",
+    "rules": [
+      {
+        "inboundTag": [
+          "tun-in"
+        ],
+        "outboundTag": "direct",
+        "process": [
+          "self/",
+          "xray/",
+          "C:/Program Files/LiteRay/LiteRay.exe"
+        ]
+      },
+      {
+        "inboundTag": [
+          "tun-in"
+        ],
+        "outboundTag": "dns-out",
+        "port": 53
+      },
+      {
+        "inboundTag": [
+          "dns-internal"
+        ],
+        "ip": [
+          "77.88.8.8"
+        ],
+        "outboundTag": "direct"
+      },
+      {
+        "inboundTag": [
+          "dns-internal"
+        ],
+        "outboundTag": "proxy"
+      },
+      {
+        "ip": [
+          "geoip:private"
+        ],
+        "outboundTag": "direct"
+      },
+      {
+        "domain": [
+          "full:localhost"
+        ],
+        "outboundTag": "direct"
+      },
+      {
+        "inboundTag": [
+          "tun-in"
+        ],
+        "ip": [
+          "::/0"
+        ],
+        "outboundTag": "block"
+      },
+      {
+        "domain": [
+          "geosite:category-ads-all"
+        ],
+        "outboundTag": "block"
+      },
+      {
+        "outboundTag": "direct",
+        "process": [
+          "C:/Windows/System32/curl.exe",
+          "D:/Games/",
+          "Telegram"
+        ]
+      },
+      {
+        "domain": [
+          "domain:example.org",
+          "geosite:youtube"
+        ],
+        "outboundTag": "direct"
+      },
+      {
+        "ip": [
+          "1.1.1.1",
+          "10.20.0.0/16",
+          "geoip:nl"
+        ],
+        "outboundTag": "direct"
+      },
+      {
+        "domain": [
+          "geosite:category-ru",
+          "domain:ru",
+          "domain:su",
+          "domain:xn--p1ai"
+        ],
+        "outboundTag": "direct"
+      },
+      {
+        "ip": [
+          "geoip:ru"
+        ],
+        "outboundTag": "direct"
+      },
+      {
+        "network": "tcp,udp",
+        "outboundTag": "proxy"
+      }
+    ]
+  },
+  "stats": {}
+}

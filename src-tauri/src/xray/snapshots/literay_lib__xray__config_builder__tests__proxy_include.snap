@@ -1,0 +1,181 @@
+---
+source: src/xray/config_builder.rs
+expression: config
+---
+{
+  "burstObservatory": {
+    "pingConfig": {
+      "destination": "https://www.gstatic.com/generate_204",
+      "interval": "10s",
+      "sampling": 2,
+      "timeout": "5s"
+    },
+    "subjectSelector": [
+      "proxy"
+    ]
+  },
+  "dns": {
+    "queryStrategy": "UseIPv4",
+    "servers": [
+      {
+        "address": "77.88.8.8",
+        "domains": [
+          "full:cdn.example.com"
+        ],
+        "skipFallback": true
+      },
+      "https://1.1.1.1/dns-query"
+    ],
+    "tag": "dns-internal"
+  },
+  "inbounds": [
+    {
+      "listen": "127.0.0.1",
+      "port": 10808,
+      "protocol": "mixed",
+      "settings": {
+        "udp": true
+      },
+      "sniffing": {
+        "destOverride": [
+          "http",
+          "tls",
+          "quic"
+        ],
+        "enabled": true,
+        "routeOnly": true
+      },
+      "tag": "mixed-in"
+    }
+  ],
+  "log": {
+    "access": "none",
+    "loglevel": "warning"
+  },
+  "metrics": {
+    "listen": "127.0.0.1:19090",
+    "tag": "metrics"
+  },
+  "outbounds": [
+    {
+      "protocol": "vless",
+      "settings": {
+        "vnext": [
+          {
+            "address": "cdn.example.com",
+            "port": 443,
+            "users": [
+              {
+                "encryption": "none",
+                "id": "11111111-2222-3333-4444-555555555555"
+              }
+            ]
+          }
+        ]
+      },
+      "streamSettings": {
+        "network": "ws",
+        "security": "tls",
+        "tlsSettings": {
+          "fingerprint": "chrome",
+          "serverName": "cdn.example.com"
+        },
+        "wsSettings": {
+          "host": "cdn.example.com",
+          "path": "/ws"
+        }
+      },
+      "tag": "proxy",
+      "targetStrategy": "UseIPv4"
+    },
+    {
+      "protocol": "freedom",
+      "streamSettings": {
+        "sockopt": {
+          "domainStrategy": "UseIPv4"
+        }
+      },
+      "tag": "direct"
+    },
+    {
+      "protocol": "blackhole",
+      "tag": "block"
+    },
+    {
+      "protocol": "dns",
+      "tag": "dns-out"
+    }
+  ],
+  "policy": {
+    "system": {
+      "statsOutboundDownlink": true,
+      "statsOutboundUplink": true
+    }
+  },
+  "routing": {
+    "domainStrategy": "IPIfNonMatch",
+    "rules": [
+      {
+        "inboundTag": [
+          "dns-internal"
+        ],
+        "ip": [
+          "77.88.8.8"
+        ],
+        "outboundTag": "direct"
+      },
+      {
+        "inboundTag": [
+          "dns-internal"
+        ],
+        "outboundTag": "proxy"
+      },
+      {
+        "ip": [
+          "geoip:private"
+        ],
+        "outboundTag": "direct"
+      },
+      {
+        "domain": [
+          "full:localhost"
+        ],
+        "outboundTag": "direct"
+      },
+      {
+        "domain": [
+          "geosite:category-ads-all"
+        ],
+        "outboundTag": "block"
+      },
+      {
+        "outboundTag": "proxy",
+        "process": [
+          "C:/Windows/System32/curl.exe",
+          "D:/Games/",
+          "Telegram"
+        ]
+      },
+      {
+        "domain": [
+          "domain:example.org",
+          "geosite:youtube"
+        ],
+        "outboundTag": "proxy"
+      },
+      {
+        "ip": [
+          "1.1.1.1",
+          "10.20.0.0/16",
+          "geoip:nl"
+        ],
+        "outboundTag": "proxy"
+      },
+      {
+        "network": "tcp,udp",
+        "outboundTag": "direct"
+      }
+    ]
+  },
+  "stats": {}
+}

@@ -1,0 +1,23 @@
+---
+source: src/xray/config_builder.rs
+expression: "config[\"outbounds\"][0]"
+---
+{
+  "protocol": "shadowsocks",
+  "settings": {
+    "servers": [
+      {
+        "address": "1.2.3.4",
+        "method": "2022-blake3-aes-128-gcm",
+        "password": "YctPZ6U7xPPcU+gp3u+0tx/tRizJN9K8y+uKlW2qjlI=",
+        "port": 443
+      }
+    ]
+  },
+  "streamSettings": {
+    "network": "raw",
+    "security": "none"
+  },
+  "tag": "proxy",
+  "targetStrategy": "UseIPv4"
+}

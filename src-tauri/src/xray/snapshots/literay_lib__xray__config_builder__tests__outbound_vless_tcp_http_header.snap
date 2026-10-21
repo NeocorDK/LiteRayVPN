@@ -1,0 +1,43 @@
+---
+source: src/xray/config_builder.rs
+expression: "config[\"outbounds\"][0]"
+---
+{
+  "protocol": "vless",
+  "settings": {
+    "vnext": [
+      {
+        "address": "10.0.0.5",
+        "port": 80,
+        "users": [
+          {
+            "encryption": "none",
+            "id": "11111111-2222-3333-4444-555555555555"
+          }
+        ]
+      }
+    ]
+  },
+  "streamSettings": {
+    "network": "raw",
+    "rawSettings": {
+      "header": {
+        "request": {
+          "headers": {
+            "Host": [
+              "a.com",
+              "b.com"
+            ]
+          },
+          "path": [
+            "/"
+          ]
+        },
+        "type": "http"
+      }
+    },
+    "security": "none"
+  },
+  "tag": "proxy",
+  "targetStrategy": "UseIPv4"
+}

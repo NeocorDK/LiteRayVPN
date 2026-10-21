@@ -1,0 +1,35 @@
+---
+source: src/xray/config_builder.rs
+expression: "config[\"outbounds\"][0]"
+---
+{
+  "protocol": "vless",
+  "settings": {
+    "vnext": [
+      {
+        "address": "cdn.example.com",
+        "port": 443,
+        "users": [
+          {
+            "encryption": "none",
+            "id": "11111111-2222-3333-4444-555555555555"
+          }
+        ]
+      }
+    ]
+  },
+  "streamSettings": {
+    "network": "ws",
+    "security": "tls",
+    "tlsSettings": {
+      "fingerprint": "chrome",
+      "serverName": "cdn.example.com"
+    },
+    "wsSettings": {
+      "host": "cdn.example.com",
+      "path": "/ws"
+    }
+  },
+  "tag": "proxy",
+  "targetStrategy": "UseIPv4"
+}

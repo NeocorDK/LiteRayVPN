@@ -1,0 +1,35 @@
+---
+source: src/xray/config_builder.rs
+expression: "config[\"outbounds\"][0]"
+---
+{
+  "protocol": "vmess",
+  "settings": {
+    "vnext": [
+      {
+        "address": "vm.example.com",
+        "port": 443,
+        "users": [
+          {
+            "id": "11111111-2222-3333-4444-555555555555",
+            "security": "auto"
+          }
+        ]
+      }
+    ]
+  },
+  "streamSettings": {
+    "network": "ws",
+    "security": "tls",
+    "tlsSettings": {
+      "fingerprint": "chrome",
+      "serverName": "vm.example.com"
+    },
+    "wsSettings": {
+      "host": "vm.example.com",
+      "path": "/vm"
+    }
+  },
+  "tag": "proxy",
+  "targetStrategy": "UseIPv4"
+}

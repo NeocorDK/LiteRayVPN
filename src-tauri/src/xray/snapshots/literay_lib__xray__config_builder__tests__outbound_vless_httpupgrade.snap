@@ -1,0 +1,35 @@
+---
+source: src/xray/config_builder.rs
+expression: "config[\"outbounds\"][0]"
+---
+{
+  "protocol": "vless",
+  "settings": {
+    "vnext": [
+      {
+        "address": "h.example.com",
+        "port": 443,
+        "users": [
+          {
+            "encryption": "none",
+            "id": "11111111-2222-3333-4444-555555555555"
+          }
+        ]
+      }
+    ]
+  },
+  "streamSettings": {
+    "httpupgradeSettings": {
+      "host": "h.example.com",
+      "path": "/u"
+    },
+    "network": "httpupgrade",
+    "security": "tls",
+    "tlsSettings": {
+      "fingerprint": "chrome",
+      "serverName": "h.example.com"
+    }
+  },
+  "tag": "proxy",
+  "targetStrategy": "UseIPv4"
+}

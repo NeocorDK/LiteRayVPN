@@ -1,0 +1,35 @@
+---
+source: src/xray/config_builder.rs
+expression: "config[\"outbounds\"][0]"
+---
+{
+  "protocol": "vless",
+  "settings": {
+    "vnext": [
+      {
+        "address": "g.example.com",
+        "port": 443,
+        "users": [
+          {
+            "encryption": "none",
+            "id": "11111111-2222-3333-4444-555555555555"
+          }
+        ]
+      }
+    ]
+  },
+  "streamSettings": {
+    "grpcSettings": {
+      "multiMode": true,
+      "serviceName": "svc"
+    },
+    "network": "grpc",
+    "security": "tls",
+    "tlsSettings": {
+      "fingerprint": "chrome",
+      "serverName": "g.example.com"
+    }
+  },
+  "tag": "proxy",
+  "targetStrategy": "UseIPv4"
+}

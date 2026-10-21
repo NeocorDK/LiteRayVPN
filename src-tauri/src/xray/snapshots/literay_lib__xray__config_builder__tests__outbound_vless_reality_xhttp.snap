@@ -1,0 +1,40 @@
+---
+source: src/xray/config_builder.rs
+expression: "config[\"outbounds\"][0]"
+---
+{
+  "protocol": "vless",
+  "settings": {
+    "vnext": [
+      {
+        "address": "77.73.66.190",
+        "port": 443,
+        "users": [
+          {
+            "encryption": "none",
+            "id": "11111111-2222-3333-4444-555555555555"
+          }
+        ]
+      }
+    ]
+  },
+  "streamSettings": {
+    "network": "xhttp",
+    "realitySettings": {
+      "fingerprint": "firefox",
+      "publicKey": "Z84J2IelR9ch3k8VtlVhhs5ycBUlXA7wHBWcBrjqnAw",
+      "serverName": "reddit.com",
+      "shortId": "ab"
+    },
+    "security": "reality",
+    "xhttpSettings": {
+      "extra": {
+        "xPaddingBytes": "100-1000"
+      },
+      "mode": "auto",
+      "path": "/api"
+    }
+  },
+  "tag": "proxy",
+  "targetStrategy": "UseIPv4"
+}

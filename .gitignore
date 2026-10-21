@@ -1,0 +1,10 @@
+node_modules/
+dist/
+src-tauri/target/
+src-tauri/gen/
+src-tauri/resources/xray/*
+!src-tauri/resources/xray/.gitkeep
+release/
+*.log
+.vscode/*
+!.vscode/extensions.json
